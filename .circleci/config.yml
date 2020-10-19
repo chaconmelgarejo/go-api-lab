@@ -37,7 +37,7 @@ jobs:
   publish-latest:
     environment:
       IMAGE_NAME: chaconmelgarejo/go-api-lab
-      SHORT_GIT_HASH: $(echo $CIRCLE_SHA1 | cut -c -7)
+      SHORT_GIT_HASH: $(echo $CIRCLE_SHA1)
     docker:
       - image: circleci/buildpack-deps:stretch  
     steps:
