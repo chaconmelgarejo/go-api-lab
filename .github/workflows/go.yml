@@ -44,4 +44,4 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
           registry: docker.pkg.github.com
           repository: chaconmelgarejo/go-api-lab/go-api
-          #tag_with_ref: true
+          tag_with_ref: false
