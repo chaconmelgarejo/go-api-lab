@@ -4,8 +4,6 @@
 version: 2
 jobs:
   build:
-    environment:
-      IMAGE_NAME: chaconmelgarejo/go-api-lab
     docker:
       # specify the version
       - image: circleci/golang:1.9
@@ -26,6 +24,14 @@ jobs:
       # specify any bash command here prefixed with `run: `
       - run: go get github.com/gorilla/mux
       - run: go test -v ./...
+  jobs:
+    environment:
+      IMAGE_NAME: chaconmelgarejo/go-api-lab
+    docker:
+      - image: circleci/buildpack-deps:stretch
+    steps:
+      - checkout
+      - setup_remote_docker
       - run: 
           name: Docker Auth
           command: echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
