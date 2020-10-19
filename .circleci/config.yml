@@ -37,13 +37,16 @@ jobs:
   publish-latest:
     environment:
       IMAGE_NAME: chaconmelgarejo/go-api-lab
-      SHORT_GIT_HASH: $(echo $CIRCLE_SHA1)
+      SHORT_GIT_HASH: $(echo "${CIRCLE_SHA1:0:7}")
     docker:
       - image: circleci/buildpack-deps:stretch  
     steps:
       - attach_workspace:
           at: /tmp/workspace
       - setup_remote_docker
+      - run:
+          name: Show new tag
+          command: echo "${CIRCLE_SHA1:0:7}"
       - run:
           name: Load archived Docker image
           command: docker load -i /tmp/workspace/image.tar
