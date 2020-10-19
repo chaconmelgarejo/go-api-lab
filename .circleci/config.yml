@@ -24,7 +24,7 @@ jobs:
       # specify any bash command here prefixed with `run: `
       - run: go get github.com/gorilla/mux
       - run: go test -v ./...
-      
+
   publish:
     environment:
       IMAGE_NAME: chaconmelgarejo/go-api-lab
@@ -42,15 +42,15 @@ jobs:
       - run:
           name: Push Docker image
           command: docker push $IMAGE_NAME:latest
-workflows:
-  version: 2
-  build-master:
-    jobs:
-      - build:
-          filters:
-            branches:
-              only: master
-      - publish:
-          filters:
-            branches:
-              only: master
+# workflows:
+#   version: 2
+#   build-master:
+#     jobs:
+#       - build:
+#           filters:
+#             branches:
+#               only: master
+#       - publish:
+#           filters:
+#             branches:
+#               only: master
