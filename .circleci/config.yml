@@ -33,7 +33,7 @@ jobs:
             - ./image.tar
   publish-latest:
     environment:
-      IMAGE_NAME: chaconmelgarejo/go-api-labs
+      IMAGE_NAME: chaconmelgarejo/go-api-lab
     docker:
       - image: circleci/buildpack-deps:stretch  
     steps:
