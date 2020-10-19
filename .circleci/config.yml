@@ -34,7 +34,7 @@ jobs:
   publish-latest:
     environment:
       IMAGE_NAME: chaconmelgarejo/go-api-lab
-      SHORT_TAG: $(echo "${CIRCLE_SHA1:0:7}")
+      IMAGE_SHORT_TAG: $IMAGE_NAME:$(echo "${CIRCLE_SHA1:0:7}")
     docker:
       - image: circleci/buildpack-deps:stretch  
     steps:
@@ -43,7 +43,7 @@ jobs:
       - setup_remote_docker
       - run:
           name: Show new tag
-          command: echo "${CIRCLE_SHA1:0:7}"
+          command: echo "${CIRCLE_SHA1:0:7}" && echo $IMAGE_SHORT_TAG
       - run:
           name: Load archived Docker image
           command: docker load -i /tmp/workspace/image.tar
@@ -52,8 +52,8 @@ jobs:
           command: |
             echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
             docker push $IMAGE_NAME:latest
-            docker tag $IMAGE_NAME:latest $IMAGE_NAME:sc-$SHORT_TAG
-            docker push $IMAGE_NAME:sc-$SHORT_TAG
+            docker tag $IMAGE_NAME $IMAGE_SHORT_TAG
+            docker push $IMAGE_SHORT_TAG
             
 workflows:
   version: 2
