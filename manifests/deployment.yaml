@@ -21,5 +21,12 @@ spec:
     spec:
       containers:
         - name: go-svc
-          image: docker.io/cloudsultor/web-go-api
+          image: docker.pkg.github.com/chaconmelgarejo/go-api-lab/go-api:develop
+          resources:
+            limits:
+              cpu: "100m"
+              memory: 256Mi
+            requests:
+              cpu: "50m"
+              memory: 128Mi
     
