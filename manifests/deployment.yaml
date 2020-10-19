@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: go-svc
+  labels:
+    name: go-svc
+    app: go-svc-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: go-svc
+      app: go-svc-app
+    
+  template:
+    metadata:
+      name: go-svc-pod
+      labels:
+        name: go-svc
+        app: go-svc-app
+    spec:
+      containers:
+        - name: go-svc
+          image: docker.io/cloudsultor/web-go-api
+    
