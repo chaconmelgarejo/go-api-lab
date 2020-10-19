@@ -3,29 +3,19 @@
 # Check https://circleci.com/docs/2.0/language-go/ for more details
 version: 2
 jobs:
-  build:
+  test:
     docker:
-      # specify the version
       - image: circleci/golang:1.9
-
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
-
-    #### TEMPLATE_NOTE: go expects specific checkout path representing url
-    #### expecting it in the form of
-    ####   /go/src/github.com/circleci/go-tool
-    ####   /go/src/bitbucket.org/circleci/go-tool
     working_directory: /go/src/github.com/chaconmelgarejo/go-api-lab
     steps:
       - checkout
-
-      # specify any bash command here prefixed with `run: `
-      - run: go get github.com/gorilla/mux
-      - run: go test -v ./...
-
-  publish:
+      - run: 
+          name: Install dependencies
+          command: go get github.com/gorilla/mux
+      - run: 
+          name: Testing ...
+          command: go test -v ./...
+  build:
     environment:
       IMAGE_NAME: chaconmelgarejo/go-api-lab
     docker:
@@ -33,24 +23,50 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
-      - run: 
-          name: Docker Auth
-          command: echo "$DOCKER_PASS" | docker login --username $DOCKER_USER --password-stdin
       - run:
           name: Build Docker image
-          command: docker build -t $IMAGE_NAME:latest .
+          command: |
+            docker build -t $IMAGE_NAME:latest .
       - run:
-          name: Push Docker image
-          command: docker push $IMAGE_NAME:latest
-# workflows:
-#   version: 2
-#   build-master:
-#     jobs:
-#       - build:
-#           filters:
-#             branches:
-#               only: master
-#       - publish:
-#           filters:
-#             branches:
-#               only: master
+          name: Archive Docker image
+          command: docker save -o image.tar $IMAGE_NAME
+      - persist_to_workspace:
+          root: .
+          paths:
+            - ./image.tar
+  publish-latest:
+    environment:
+      IMAGE_NAME: chaconmelgarejo/go-api-lab
+    docker:
+      - image: circleci/buildpack-deps:stretch  
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - setup_remote_docker
+      - run:
+          name: Load archived Docker image
+          command: docker load -i /tmp/workspace/image.tar
+      - run:
+          name: Publish Docker Image to Docker Hub
+          command: |
+            echo "$DOCKERHUB_PASS" | docker login -u "$DOCKERHUB_USERNAME" --password-stdin
+            docker push $IMAGE_NAME:latest
+    
+workflows:
+  version: 2
+  build-master:
+    jobs:
+      - test:
+          filters:
+            branches:
+              only: master
+      - build:
+          filters:
+            branches:
+              only: master
+      - publish-latest:
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
