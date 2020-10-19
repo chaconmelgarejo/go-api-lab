@@ -23,7 +23,6 @@ jobs:
     steps:
       - checkout
       - setup_remote_docker
-          docker_layer_caching: true
       - run:
           name: Build Docker image
           command: |
@@ -45,7 +44,6 @@ jobs:
       - attach_workspace:
           at: /tmp/workspace
       - setup_remote_docker
-          docker_layer_caching: true
       - restore_cache:
       - run:
           name: Load archived Docker image
