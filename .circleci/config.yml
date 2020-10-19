@@ -54,7 +54,7 @@ jobs:
           command: |
             echo "$DOCKER_PASS" | docker login -u "$DOCKER_USER" --password-stdin
             docker push $IMAGE_NAME:latest
-            docker tag $IMAGE_NAME $IMAGE_NAME:$(cat version.txt)
+            docker tag $IMAGE_NAME:latest $IMAGE_NAME:$(cat version.txt)
             docker push $IMAGE_NAME:$(cat version.txt)
             
 workflows:
