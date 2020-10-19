@@ -24,7 +24,7 @@ jobs:
       # specify any bash command here prefixed with `run: `
       - run: go get github.com/gorilla/mux
       - run: go test -v ./...
-jobs:
+      
   publish:
     environment:
       IMAGE_NAME: chaconmelgarejo/go-api-lab
