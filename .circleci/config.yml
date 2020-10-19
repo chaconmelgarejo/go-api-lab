@@ -34,7 +34,7 @@ jobs:
   publish-latest:
     environment:
       IMAGE_NAME: chaconmelgarejo/go-api-lab
-      IMAGE_SHORT_TAG: $IMAGE_NAME:$(echo "${CIRCLE_SHA1:0:7}")
+      IMAGE_SHORT_TAG: $(echo "$IMAGE_NAME:${CIRCLE_SHA1:0:7}")
     docker:
       - image: circleci/buildpack-deps:stretch  
     steps:
