@@ -58,16 +58,16 @@ workflows:
       - test:
           filters:
             branches:
-              only: master
+              only: main
       - build:
           requires:
             - test
           filters:
             branches:
-              only: master
+              only: main
       - publish-latest:
           requires:
             - build
           filters:
             branches:
-              only: master
+              only: main
